@@ -4,8 +4,10 @@ public class Driver : MonoBehaviour
 {
     const float DEFAULT_INPUT_AXIS_MAX_ABSOLUTE_VALUE = 1.0f;
 
-    [SerializeField] float _moveSpeed = 100.0f;
-    [SerializeField] float _steerSpeed = 100.0f;
+    [SerializeField] float _moveSpeed = 20.0f;
+    [SerializeField] float _normalMoveSpeed = 20.0f;
+    [SerializeField] float _boostMoveSpeed = 30.0f;
+    [SerializeField] float _steerSpeed = 300.0f;
 
     void Start()
     {
@@ -20,6 +22,21 @@ public class Driver : MonoBehaviour
         float reverseSteerAmount = Input.GetAxis("Horizontal") / DEFAULT_INPUT_AXIS_MAX_ABSOLUTE_VALUE * _steerSpeed;
         float steerAmount = -reverseSteerAmount;
         transform.Rotate(0, 0, steerAmount * Time.deltaTime);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collision!");
+        _moveSpeed = _normalMoveSpeed;
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Boost")
+        {
+            Debug.Log("Boost!");
+            _moveSpeed = _boostMoveSpeed;
+        }
     }
 
 
